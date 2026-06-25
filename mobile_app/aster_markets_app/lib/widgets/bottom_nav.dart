@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class AppBottomNav extends StatelessWidget {
   final int currentIndex;
@@ -8,44 +9,67 @@ class AppBottomNav extends StatelessWidget {
     required this.currentIndex,
   });
 
-  void _navigate(BuildContext context, int index) {
+  Widget _navIcon(String assetPath, bool isSelected) {
+    return SvgPicture.asset(
+      assetPath,
+      width: 25,
+      height: 25,
+      colorFilter: ColorFilter.mode(
+        isSelected ? const Color(0xFF146CFF) : Colors.grey,
+        BlendMode.srcIn,
+      ),
+    );
+  }
+
+  void _goToPage(BuildContext context, int index) {
     if (index == currentIndex) return;
 
-    if (index == 0) {
-      Navigator.pushReplacementNamed(context, '/home');
-    } else if (index == 1) {
-      Navigator.pushReplacementNamed(context, '/market');
-    } else if (index == 2) {
-      Navigator.pushReplacementNamed(context, '/portfolio');
-    } else if (index == 3) {
-      Navigator.pushReplacementNamed(context, '/pro');
+    String routeName;
+
+    switch (index) {
+      case 0:
+        routeName = '/home';
+        break;
+      case 1:
+        routeName = '/market';
+        break;
+      case 2:
+        routeName = '/portfolio';
+        break;
+      case 3:
+        routeName = '/pro';
+        break;
+      default:
+        routeName = '/home';
     }
+
+    Navigator.pushReplacementNamed(context, routeName);
   }
 
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
       currentIndex: currentIndex,
-      onTap: (index) => _navigate(context, index),
-      items: const [
+      onTap: (index) => _goToPage(context, index),
+      type: BottomNavigationBarType.fixed,
+      backgroundColor: const Color(0xFF171A2E),
+      selectedItemColor: const Color(0xFF146CFF),
+      unselectedItemColor: Colors.grey,
+      items: [
         BottomNavigationBarItem(
-          icon: Icon(Icons.home_outlined),
-          activeIcon: Icon(Icons.home),
+          icon: _navIcon('assets/tabs/tab_home.svg', currentIndex == 0),
           label: 'Home',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.article_outlined),
-          activeIcon: Icon(Icons.article),
+          icon: _navIcon('assets/tabs/tab_news.svg', currentIndex == 1),
           label: 'News',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.account_balance_wallet_outlined),
-          activeIcon: Icon(Icons.account_balance_wallet),
+          icon: _navIcon('assets/tabs/tab_assets.svg', currentIndex == 2),
           label: 'Assets',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.workspace_premium_outlined),
-          activeIcon: Icon(Icons.workspace_premium),
+          icon: _navIcon('assets/tabs/tab_pro.svg', currentIndex == 3),
           label: 'Pro',
         ),
       ],
