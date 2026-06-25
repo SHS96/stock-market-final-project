@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aster Markets | Stock Detail</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="index.html">Aster Markets</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="mainNavbar">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="market.html">Market</a></li>
+                <li class="nav-item"><a class="nav-link active" href="stock-detail.html">Stock Detail</a></li>
+                <li class="nav-item"><a class="nav-link" href="portfolio.html">Portfolio</a></li>
+                <li class="nav-item"><a class="nav-link" href="pro.html">Pro</a></li>
+                <li class="nav-item"><a class="nav-link" href="login.html">Login</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Stock Header -->
+<section class="hero">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <p style="color: var(--text-muted)">AEX · Netherlands</p>
+                <h1 class="display-5 fw-bold">ASML Holding</h1>
+                <h2 class="mt-2">€912.40</h2>
+                <p class="text-positive fw-bold fs-5">+2.46% Today</p>
+            </div>
+            <div class="col-lg-6 mt-4 mt-lg-0">
+                <div class="card card-custom p-4">
+                    <div class="row text-center">
+                        <div class="col-4">
+                            <p style="color:var(--text-muted); font-size:0.85rem">Open</p>
+                            <p class="fw-bold">€890.10</p>
+                        </div>
+                        <div class="col-4">
+                            <p style="color:var(--text-muted); font-size:0.85rem">High</p>
+                            <p class="fw-bold">€918.60</p>
+                        </div>
+                        <div class="col-4">
+                            <p style="color:var(--text-muted); font-size:0.85rem">Low</p>
+                            <p class="fw-bold">€887.30</p>
+                        </div>
+                        <div class="col-4 mt-3">
+                            <p style="color:var(--text-muted); font-size:0.85rem">Volume</p>
+                            <p class="fw-bold">1.2M</p>
+                        </div>
+                        <div class="col-4 mt-3">
+                            <p style="color:var(--text-muted); font-size:0.85rem">Mkt Cap</p>
+                            <p class="fw-bold">€361B</p>
+                        </div>
+                        <div class="col-4 mt-3">
+                            <p style="color:var(--text-muted); font-size:0.85rem">P/E Ratio</p>
+                            <p class="fw-bold">38.4</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Chart Placeholder -->
+<section class="container mb-5">
+    <h2 class="fw-bold mb-4">Price Chart</h2>
+    <div class="card card-custom p-4">
+        <canvas id="stockChart" height="100"></canvas>
+    </div>
+</section>
+
+<!-- Price History Table -->
+<section class="container mb-5">
+    <h2 class="fw-bold mb-4">Price History</h2>
+    <div class="card card-custom p-4">
+        <table class="table table-dark table-hover mb-0">
+            <thead>
+                <tr style="color: var(--text-muted)">
+                    <th>Date</th>
+                    <th>Open</th>
+                    <th>High</th>
+                    <th>Low</th>
+                    <th>Close</th>
+                    <th>Change</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>20 Jun 2026</td>
+                    <td>€890.10</td>
+                    <td>€918.60</td>
+                    <td>€887.30</td>
+                    <td>€912.40</td>
+                    <td class="text-positive fw-bold">+2.46%</td>
+                </tr>
+                <tr>
+                    <td>19 Jun 2026</td>
+                    <td>€875.00</td>
+                    <td>€892.40</td>
+                    <td>€870.10</td>
+                    <td>€890.10</td>
+                    <td class="text-positive fw-bold">+1.72%</td>
+                </tr>
+                <tr>
+                    <td>18 Jun 2026</td>
+                    <td>€880.30</td>
+                    <td>€883.00</td>
+                    <td>€864.50</td>
+                    <td>€875.00</td>
+                    <td class="text-negative fw-bold">-0.60%</td>
+                </tr>
+                <tr>
+                    <td>17 Jun 2026</td>
+                    <td>€865.20</td>
+                    <td>€885.10</td>
+                    <td>€860.00</td>
+                    <td>€880.30</td>
+                    <td class="text-positive fw-bold">+1.75%</td>
+                </tr>
+                <tr>
+                    <td>16 Jun 2026</td>
+                    <td>€872.00</td>
+                    <td>€875.50</td>
+                    <td>€855.40</td>
+                    <td>€865.20</td>
+                    <td class="text-negative fw-bold">-0.78%</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<footer class="footer text-center">
+    <div class="container">
+        <p class="mb-0">© 2026 Aster Markets. Stock market tracking web app.</p>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="js/script.js"></script>
+
+<script>
+    const ctx = document.getElementById('stockChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: ['16 Jun', '17 Jun', '18 Jun', '19 Jun', '20 Jun'],
+            datasets: [{
+                label: 'ASML Price (€)',
+                data: [865.20, 880.30, 875.00, 890.10, 912.40],
+                borderColor: '#1177FF',
+                backgroundColor: 'rgba(17, 119, 255, 0.1)',
+                borderWidth: 2,
+                fill: true,
+                tension: 0.4
+            }]
+        },
+        options: {
+            plugins: { legend: { labels: { color: 'white' } } },
+            scales: {
+                x: { ticks: { color: '#9CA3AF' }, grid: { color: '#1e2140' } },
+                y: { ticks: { color: '#9CA3AF' }, grid: { color: '#1e2140' } }
+            }
+        }
+    });
+</script>
+
+</body>
+</html>
