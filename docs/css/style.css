@@ -1,0 +1,72 @@
+:root {
+    --bg-dark: #0E1020;
+    --card-dark: #171A2E;
+    --primary-blue: #1177FF;
+    --positive-green: #22D39A;
+    --negative-red: #FF5A76;
+    --text-light: #FFFFFF;
+    --text-muted: #9CA3AF;
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-light);
+    font-family: Arial, sans-serif;
+}
+
+.navbar {
+    background-color: var(--bg-dark);
+}
+
+.navbar-brand,
+.nav-link {
+    color: white !important;
+}
+
+.nav-link:hover {
+    color: var(--primary-blue) !important;
+}
+
+.hero {
+    padding: 80px 0;
+}
+
+.hero p,
+.text-muted-custom {
+    color: var(--text-muted);
+}
+
+.card-custom {
+    background-color: var(--card-dark);
+    border: none;
+    border-radius: 18px;
+    color: white;
+}
+
+.text-positive {
+    color: var(--positive-green);
+}
+
+.text-negative {
+    color: var(--negative-red);
+}
+
+.btn-custom {
+    background-color: var(--primary-blue);
+    color: white;
+    border-radius: 10px;
+    padding: 10px 22px;
+    text-decoration: none;
+}
+
+.btn-custom:hover {
+    background-color: #0d5fd1;
+    color: white;
+}
+
+.footer {
+    background-color: var(--card-dark);
+    color: var(--text-muted);
+    padding: 20px 0;
+    margin-top: 60px;
+}
