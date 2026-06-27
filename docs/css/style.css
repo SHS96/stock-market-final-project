@@ -1,72 +1,109 @@
 :root {
-    --bg-dark: #0E1020;
-    --card-dark: #171A2E;
-    --primary-blue: #1177FF;
-    --positive-green: #22D39A;
-    --negative-red: #FF5A76;
-    --text-light: #FFFFFF;
-    --text-muted: #9CA3AF;
+  --bg-dark: #0e1020;
+  --card-dark: #171a2e;
+  --primary-blue: #1177ff;
+  --positive-green: #22d39a;
+  --negative-red: #ff5a76;
+  --text-light: #ffffff;
+  --text-muted: #9ca3af;
 }
 
 body {
-    background-color: var(--bg-dark);
-    color: var(--text-light);
-    font-family: Arial, sans-serif;
+  background-color: var(--bg-dark);
+  color: var(--text-light);
+  font-family: Arial, sans-serif;
 }
 
 .navbar {
-    background-color: var(--bg-dark);
+  background-color: var(--bg-dark);
 }
 
 .navbar-brand,
 .nav-link {
-    color: white !important;
+  color: white !important;
 }
 
 .nav-link:hover {
-    color: var(--primary-blue) !important;
+  color: var(--primary-blue) !important;
 }
 
 .hero {
-    padding: 80px 0;
+  padding: 80px 0;
 }
 
 .hero p,
 .text-muted-custom {
-    color: var(--text-muted);
+  color: var(--text-muted);
 }
 
 .card-custom {
-    background-color: var(--card-dark);
-    border: none;
-    border-radius: 18px;
-    color: white;
+  background-color: var(--card-dark);
+  border: none;
+  border-radius: 18px;
+  color: white;
 }
 
 .text-positive {
-    color: var(--positive-green);
+  color: var(--positive-green);
 }
 
 .text-negative {
-    color: var(--negative-red);
+  color: var(--negative-red);
 }
 
 .btn-custom {
-    background-color: var(--primary-blue);
-    color: white;
-    border-radius: 10px;
-    padding: 10px 22px;
-    text-decoration: none;
+  background-color: var(--primary-blue);
+  color: white;
+  border-radius: 10px;
+  padding: 10px 22px;
+  text-decoration: none;
 }
 
 .btn-custom:hover {
-    background-color: #0d5fd1;
-    color: white;
+  background-color: #0d5fd1;
+  color: white;
 }
 
 .footer {
-    background-color: var(--card-dark);
-    color: var(--text-muted);
-    padding: 20px 0;
-    margin-top: 60px;
+  background-color: var(--card-dark);
+  color: var(--text-muted);
+  padding: 20px 0;
+  margin-top: 60px;
+}
+
+/* Mobile Responsive Fix */
+.table-responsive-custom {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  width: 100%;
+}
+
+.table-responsive-custom table {
+  min-width: 550px;
+}
+
+@media (max-width: 768px) {
+  .card-custom {
+    padding: 12px !important;
+  }
+
+  .hero {
+    padding: 40px 0;
+  }
+
+  .display-4,
+  .display-5 {
+    font-size: 1.8rem;
+  }
+}
+
+/* Fix green/red colors inside dark tables */
+.table-dark .text-positive,
+.table-dark td.text-positive {
+  color: var(--positive-green) !important;
+}
+
+.table-dark .text-negative,
+.table-dark td.text-negative {
+  color: var(--negative-red) !important;
 }
