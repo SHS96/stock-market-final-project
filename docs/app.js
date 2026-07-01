@@ -4,53 +4,55 @@
 
 const mockStocks = [
   {
-    name: "ASML Holding",
-    symbol: "ASML",
-    price: 912.4,
-    change: 2.46,
-    country: "Netherlands",
-    market: "AEX",
+    name: "Apple",
+    symbol: "AAPL",
+    price: 195.32,
+    change: 1.15,
+    country: "United States",
+    market: "NASDAQ",
   },
   {
-    name: "SAP",
-    symbol: "SAP",
-    price: 183.22,
-    change: 1.18,
-    country: "Germany",
-    market: "DAX",
+    name: "Microsoft",
+    symbol: "MSFT",
+    price: 420.10,
+    change: 0.62,
+    country: "United States",
+    market: "NASDAQ",
   },
   {
-    name: "LVMH",
-    symbol: "LVMH",
-    price: 736.1,
-    change: -0.72,
-    country: "France",
-    market: "CAC 40",
+    name: "NVIDIA",
+    symbol: "NVDA",
+    price: 138.25,
+    change: -1.32,
+    country: "United States",
+    market: "NASDAQ",
   },
   {
-    name: "Siemens",
-    symbol: "SIE",
-    price: 178.54,
-    change: 0.93,
-    country: "Germany",
-    market: "DAX",
+    name: "Amazon",
+    symbol: "AMZN",
+    price: 185.60,
+    change: 0.81,
+    country: "United States",
+    market: "NASDAQ",
   },
   {
-    name: "TotalEnergies",
-    symbol: "TTE",
-    price: 58.32,
-    change: -1.04,
-    country: "France",
-    market: "CAC 40",
+    name: "Alphabet",
+    symbol: "GOOGL",
+    price: 175.80,
+    change: -0.62,
+    country: "United States",
+    market: "NASDAQ",
   },
   {
-    name: "Unilever",
-    symbol: "ULVR",
-    price: 44.78,
-    change: 0.55,
-    country: "United Kingdom",
-    market: "FTSE 100",
+    name: "Tesla",
+    symbol: "TSLA",
+    price: 183.20,
+    change: 1.22,
+    country: "United States",
+    market: "NASDAQ",
   },
+];
+  
 ];
 
 let currentStocks = [...mockStocks];
@@ -244,17 +246,13 @@ async function loadLiveMarketData() {
 
   try {
     const params = new URLSearchParams({
-      symbols: apiSymbols.join(","),
-      limit: "20",
+        access_key: apiKey,
+        symbols: apiSymbols.join(","),
+        limit: "20",
     });
 
     const response = await fetch(
-      `https://api.marketstack.com/v2/eod?${params.toString()}`,
-      {
-        headers: {
-          apikey: apiKey,
-        },
-      }
+        `https://api.marketstack.com/v1/eod?${params.toString()}`
     );
 
     const payload = await response.json().catch(() => ({}));
