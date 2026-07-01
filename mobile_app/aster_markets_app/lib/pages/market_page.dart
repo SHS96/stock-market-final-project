@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../services/stock_api_service.dart';
 import '../widgets/bottom_nav.dart';
 import '../widgets/stock_card.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MarketPage extends StatelessWidget {
   const MarketPage({super.key});
@@ -47,22 +48,41 @@ class MarketPage extends StatelessWidget {
     }
   }
 
+  Future<void> _openNews(BuildContext context, String query) async {
+    final uri = Uri.https(
+      'news.google.com',
+      '/search',
+      {'q': query},
+    );
+
+    final opened = await launchUrl(
+      uri,
+      mode: LaunchMode.externalApplication,
+    );
+
+    if (!opened && context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Could not open the news page.'),
+        ),
+      );
+    }
+  }
+
   Widget _newsCard(
       BuildContext context, {
         required String category,
         required String title,
         required String description,
         required IconData icon,
+        required String newsQuery,
       }) {
     return InkWell(
       borderRadius: BorderRadius.circular(16),
-      onTap: () {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Opening news preview: $title'),
-          ),
-        );
+      onTap: () async {
+        await _openNews(context, newsQuery);
       },
+
       child: Container(
         margin: const EdgeInsets.only(bottom: 12),
         padding: const EdgeInsets.all(16),
@@ -187,6 +207,7 @@ class MarketPage extends StatelessWidget {
             description:
             'Technology, banking and industrial companies remain in focus.',
             icon: Icons.public,
+            newsQuery: 'European stock market news',
           ),
 
           _newsCard(
@@ -196,6 +217,7 @@ class MarketPage extends StatelessWidget {
             description:
             'Investors are monitoring major technology companies closely.',
             icon: Icons.memory_outlined,
+            newsQuery: 'AI technology stock market news',
           ),
 
           _newsCard(
@@ -205,6 +227,7 @@ class MarketPage extends StatelessWidget {
             description:
             'Balanced portfolios can help manage short-term price changes.',
             icon: Icons.account_balance_wallet_outlined,
+            newsQuery: 'portfolio diversification investment news',
           ),
         ],
       ),
