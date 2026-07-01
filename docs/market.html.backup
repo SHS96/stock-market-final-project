@@ -43,42 +43,7 @@
 
 <!-- Stock Table Container -->
 <section class="container mb-5">
-    <h2 class="fw-bold mb-4">Technology Watchlist</h2>
-
-    <div class="row g-3 align-items-end mb-3">
-        <div class="col-md-7">
-            <label for="country-market-select" class="form-label">
-                Select Market Country
-            </label>
-
-            <select
-                id="country-market-select"
-                class="form-select bg-dark text-white border-secondary"
-            >
-                <option value="United States">United States — NASDAQ</option>
-                <option value="Germany">Germany — DAX</option>
-                <option value="France">France — CAC 40</option>
-                <option value="Netherlands">Netherlands — AEX</option>
-                <option value="United Kingdom">United Kingdom — FTSE 100</option>
-            </select>
-        </div>
-
-        <div class="col-md-5">
-            <button
-                id="detect-location-button"
-                type="button"
-                class="btn btn-outline-primary w-100"
-            >
-                Use My Location
-            </button>
-        </div>
-    </div>
-
-    <div id="location-status" class="mb-2"></div>
-
-    <p class="small text-muted mb-4">
-        The watchlist below contains the six technology stocks selected for this project.
-    </p>
+    <h2 class="fw-bold mb-4">Top Stocks</h2>
     
     <!-- ADDED BY BASIR: Search & Currency Controls -->
     <div class="row g-3 mb-4">

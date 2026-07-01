@@ -380,3 +380,178 @@ document.addEventListener("DOMContentLoaded", () => {
 
   initChartTimeRangeButtons();
 });
+
+
+// ==========================================
+// COUNTRY MARKET SELECTOR AND GEOLOCATION
+// ==========================================
+
+let selectedMarketCountry = "United States";
+
+const countryMarketConfig = {
+  "United States": {
+    index: "NASDAQ",
+    description: "US technology market overview is selected.",
+  },
+  Germany: {
+    index: "DAX",
+    description: "German market overview is selected.",
+  },
+  France: {
+    index: "CAC 40",
+    description: "French market overview is selected.",
+  },
+  Netherlands: {
+    index: "AEX",
+    description: "Netherlands market overview is selected.",
+  },
+  "United Kingdom": {
+    index: "FTSE 100",
+    description: "United Kingdom market overview is selected.",
+  },
+};
+
+function setLocationStatus(message, type = "secondary") {
+  const statusBox = document.getElementById("location-status");
+
+  if (!statusBox) return;
+
+  statusBox.className = `alert alert-${type} py-2 mb-2`;
+  statusBox.textContent = message;
+}
+
+function updateMarketCountryUI() {
+  const config =
+    countryMarketConfig[selectedMarketCountry] ||
+    countryMarketConfig["United States"];
+
+  const label = document.getElementById("selected-country-label");
+  const context = document.getElementById("market-context");
+  const selector = document.getElementById("country-market-select");
+
+  if (label) {
+    label.textContent = selectedMarketCountry;
+  }
+
+  if (context) {
+    context.textContent = `${config.index} selected. ${config.description}`;
+  }
+
+  if (selector) {
+    selector.value = selectedMarketCountry;
+  }
+}
+
+function selectMarketCountry(country, source = "manual") {
+  if (!countryMarketConfig[country]) {
+    setLocationStatus(
+      `Location detected: ${country}. Please choose a supported market manually.`,
+      "warning"
+    );
+    return;
+  }
+
+  selectedMarketCountry = country;
+  updateMarketCountryUI();
+
+  const config = countryMarketConfig[country];
+  const sourceText =
+    source === "location" ? "Location detected" : "Market selected";
+
+  setLocationStatus(
+    `${sourceText}: ${country} (${config.index}).`,
+    "success"
+  );
+}
+
+async function getCountryFromCoordinates(latitude, longitude) {
+  const url = new URL(
+    "https://api.bigdatacloud.net/data/reverse-geocode-client"
+  );
+
+  url.search = new URLSearchParams({
+    latitude: latitude,
+    longitude: longitude,
+    localityLanguage: "en",
+  });
+
+  const response = await fetch(url);
+
+  if (!response.ok) {
+    throw new Error("Reverse geocoding request failed.");
+  }
+
+  const data = await response.json();
+
+  if (!data.countryName) {
+    throw new Error("Country name was not returned.");
+  }
+
+  return data.countryName;
+}
+
+function detectMarketFromLocation() {
+  if (!navigator.geolocation) {
+    setLocationStatus(
+      "Geolocation is not supported. Please select a country manually.",
+      "warning"
+    );
+    return;
+  }
+
+  setLocationStatus("Requesting your location permission...", "info");
+
+  navigator.geolocation.getCurrentPosition(
+    async (position) => {
+      try {
+        const country = await getCountryFromCoordinates(
+          position.coords.latitude,
+          position.coords.longitude
+        );
+
+        selectMarketCountry(country, "location");
+      } catch (_) {
+        setLocationStatus(
+          "Location was found, but the country could not be identified. Please select a market manually.",
+          "warning"
+        );
+      }
+    },
+    () => {
+      setLocationStatus(
+        "Location permission was not granted. Please select a country manually.",
+        "warning"
+      );
+    },
+    {
+      enableHighAccuracy: false,
+      timeout: 10000,
+      maximumAge: 300000,
+    }
+  );
+}
+
+function initCountryMarketSelector() {
+  const selector = document.getElementById("country-market-select");
+  const locationButton = document.getElementById("detect-location-button");
+
+  if (!selector) return;
+
+  selector.addEventListener("change", (event) => {
+    selectMarketCountry(event.target.value);
+  });
+
+  locationButton?.addEventListener("click", detectMarketFromLocation);
+
+  updateMarketCountryUI();
+
+  setLocationStatus(
+    "Choose a country manually or use your current location.",
+    "secondary"
+  );
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  initCountryMarketSelector();
+});
+
