@@ -1,127 +1,384 @@
 // ==========================================
-// 1. BASE FALLBACK DATA SETS
+// 1. DEMO / FALLBACK DATA
 // ==========================================
+
 const mockStocks = [
-    { name: 'ASML Holding', symbol: 'ASML', price: 912.40, change: 2.46, market: 'AEX' },
-    { name: 'SAP', symbol: 'SAP', price: 183.22, change: 1.18, market: 'DAX' },
-    { name: 'LVMH', symbol: 'LVMH', price: 736.10, change: -0.72, market: 'CAC 40' },
-    { name: 'Siemens', symbol: 'SIE', price: 178.54, change: 0.93, market: 'DAX' },
-    { name: 'TotalEnergies', symbol: 'TTE', price: 58.32, change: -1.04, market: 'CAC 40' },
-    { name: 'Unilever', symbol: 'ULVR', price: 44.78, change: 0.55, market: 'FTSE 100' }
+  {
+    name: "ASML Holding",
+    symbol: "ASML",
+    price: 912.4,
+    change: 2.46,
+    country: "Netherlands",
+    market: "AEX",
+  },
+  {
+    name: "SAP",
+    symbol: "SAP",
+    price: 183.22,
+    change: 1.18,
+    country: "Germany",
+    market: "DAX",
+  },
+  {
+    name: "LVMH",
+    symbol: "LVMH",
+    price: 736.1,
+    change: -0.72,
+    country: "France",
+    market: "CAC 40",
+  },
+  {
+    name: "Siemens",
+    symbol: "SIE",
+    price: 178.54,
+    change: 0.93,
+    country: "Germany",
+    market: "DAX",
+  },
+  {
+    name: "TotalEnergies",
+    symbol: "TTE",
+    price: 58.32,
+    change: -1.04,
+    country: "France",
+    market: "CAC 40",
+  },
+  {
+    name: "Unilever",
+    symbol: "ULVR",
+    price: 44.78,
+    change: 0.55,
+    country: "United Kingdom",
+    market: "FTSE 100",
+  },
 ];
 
-const chartHistoricalData = {
-    '1D': [905.00, 908.50, 910.10, 907.30, 912.40],
-    '1M': [865.20, 880.30, 875.00, 890.10, 912.40],
-    '3M': [820.00, 845.00, 860.00, 850.00, 912.40],
-    '1Y': [710.00, 780.00, 830.00, 880.00, 912.40]
-};
+let currentStocks = [...mockStocks];
+let selectedCurrency = "EUR";
 
-let selectedCurrency = 'EUR';
 const currencyConfig = {
-    EUR: { rate: 1.00, symbol: '€' },
-    USD: { rate: 1.12, symbol: '$' },
-    CNY: { rate: 7.82, symbol: '¥' }
+  EUR: { rate: 1, symbol: "€" },
+  USD: { rate: 1.12, symbol: "$" },
+  CNY: { rate: 7.82, symbol: "¥" },
+};
+
+// Only used when testing the live API.
+const apiSymbols = ["ASML", "SAP"];
+
+const stockMeta = {
+  ASML: {
+    name: "ASML Holding",
+    country: "Netherlands",
+  },
+  SAP: {
+    name: "SAP",
+    country: "Germany",
+  },
 };
 
 // ==========================================
-// 2. RUN MANDATORY API QUERY CHECK
+// 2. CHART DATA
 // ==========================================
-async function runMarketstackAPI() {
-    const apiKey = 'YOUR_FREE_API_KEY'; 
-    const url = `https://api.marketstack.com/v1/eod?access_key=${apiKey}&symbols=ASML,SAP`;
 
-    try {
-        let response = await fetch(url);
-        if (!response.ok) throw new Error("Quota limit reached. Activating safe local demo fallback.");
-        let data = await response.json();
-        console.log("Live Marketstack API connection working:", data);
-    } catch (err) {
-        console.warn("Marketstack Notice:", err.message);
-        renderTableRows(mockStocks);
-    }
+const chartHistoricalData = {
+  "1D": {
+    labels: ["09:30", "11:00", "12:30", "14:00", "Close"],
+    values: [905.0, 908.5, 910.1, 907.3, 912.4],
+  },
+  "1M": {
+    labels: ["Week 1", "Week 2", "Week 3", "Week 4", "Today"],
+    values: [865.2, 880.3, 875.0, 890.1, 912.4],
+  },
+  "3M": {
+    labels: ["Month 1", "Month 2", "Month 3", "Month 4", "Today"],
+    values: [820.0, 845.0, 860.0, 850.0, 912.4],
+  },
+  "1Y": {
+    labels: ["Jul", "Sep", "Nov", "Feb", "Today"],
+    values: [710.0, 780.0, 830.0, 880.0, 912.4],
+  },
+};
+
+// ==========================================
+// 3. HELPERS
+// ==========================================
+
+function setApiStatus(message, type = "secondary") {
+  const statusBox = document.getElementById("api-status");
+
+  if (!statusBox) return;
+
+  statusBox.className = `alert alert-${type} py-2 mb-3`;
+  statusBox.textContent = message;
 }
 
-// ==========================================
-// 3. TABLE RENDERING CONVERTER ENGINE
-// ==========================================
 function renderTableRows(stocksArray) {
-    const tableBody = document.getElementById('stock-table-body');
-    if (!tableBody) return; 
+  const tableBody = document.getElementById("stock-table-body");
 
-    tableBody.innerHTML = ''; 
-    const config = currencyConfig[selectedCurrency];
+  if (!tableBody) return;
 
-    stocksArray.forEach(stock => {
-        const convertedPrice = (stock.price * config.rate).toFixed(2);
-        const isPositive = stock.change >= 0;
-        const trendClass = isPositive ? 'text-positive' : 'text-negative';
-        const trendSign = isPositive ? '+' : '';
+  const config = currencyConfig[selectedCurrency];
+  tableBody.innerHTML = "";
 
-        tableBody.innerHTML += `
-            <tr>
-                <td>${stock.name}</td>
-                <td><strong>${stock.symbol}</strong></td>
-                <td>${config.symbol}${convertedPrice}</td>
-                <td class="${trendClass} fw-bold">${trendSign}${stock.change}%</td>
-                <td>${stock.market}</td>
-                <td><a href="stock-detail.html" class="btn-custom d-inline-block" style="padding:5px 14px; font-size:0.85rem">View</a></td>
-            </tr>
-        `;
-    });
+  stocksArray.forEach((stock) => {
+    const convertedPrice = (stock.price * config.rate).toFixed(2);
+    const isPositive = stock.change >= 0;
+    const trendClass = isPositive ? "text-positive" : "text-negative";
+    const trendSign = isPositive ? "+" : "";
+
+    tableBody.innerHTML += `
+      <tr>
+        <td>${stock.name}</td>
+        <td><strong>${stock.symbol}</strong></td>
+        <td>${config.symbol}${convertedPrice}</td>
+        <td class="${trendClass} fw-bold">
+          ${trendSign}${stock.change.toFixed(2)}%
+        </td>
+        <td>${stock.country}</td>
+        <td>${stock.market}</td>
+        <td>
+          <a href="stock-detail.html"
+             class="btn-custom d-inline-block"
+             style="padding:5px 14px; font-size:0.85rem">
+             View
+          </a>
+        </td>
+      </tr>
+    `;
+  });
+
+  if (stocksArray.length === 0) {
+    tableBody.innerHTML = `
+      <tr>
+        <td colspan="7" class="text-center text-muted">
+          No matching stocks found.
+        </td>
+      </tr>
+    `;
+  }
+}
+
+function applyFilters() {
+  const searchInput = document.getElementById("search-input");
+  const keyword = searchInput ? searchInput.value.trim().toLowerCase() : "";
+
+  const filteredStocks = currentStocks.filter((stock) => {
+    return (
+      stock.name.toLowerCase().includes(keyword) ||
+      stock.symbol.toLowerCase().includes(keyword) ||
+      stock.country.toLowerCase().includes(keyword) ||
+      stock.market.toLowerCase().includes(keyword)
+    );
+  });
+
+  renderTableRows(filteredStocks);
 }
 
 // ==========================================
-// 4. INTERACTIVE BINDINGS
+// 4. MARKETSTACK API
 // ==========================================
-function initSearchEngine() {
-    const searchBar = document.getElementById('search-input');
-    if (!searchBar) return;
 
-    searchBar.addEventListener('input', (event) => {
-        const keyword = event.target.value.toLowerCase();
-        const matched = mockStocks.filter(stock => 
-            stock.name.toLowerCase().includes(keyword) ||
-            stock.symbol.toLowerCase().includes(keyword) ||
-            stock.market.toLowerCase().includes(keyword)
-        );
-        renderTableRows(matched);
+function convertMarketstackData(payload) {
+  const rows = Array.isArray(payload?.data) ? payload.data : [];
+  const latestBySymbol = new Map();
+
+  rows.forEach((row) => {
+    const symbol = String(row.symbol || "").toUpperCase();
+
+    if (!symbol) return;
+
+    const oldRow = latestBySymbol.get(symbol);
+
+    if (
+      !oldRow ||
+      new Date(row.date).getTime() > new Date(oldRow.date).getTime()
+    ) {
+      latestBySymbol.set(symbol, row);
+    }
+  });
+
+  return apiSymbols
+    .map((symbol) => {
+      const row = latestBySymbol.get(symbol);
+
+      if (!row) return null;
+
+      const close = Number(row.close);
+      const open = Number(row.open);
+
+      if (!Number.isFinite(close) || close <= 0) return null;
+
+      const change =
+        Number.isFinite(open) && open > 0
+          ? ((close - open) / open) * 100
+          : 0;
+
+      const meta = stockMeta[symbol] || {
+        name: symbol,
+        country: "Unknown",
+      };
+
+      return {
+        name: meta.name,
+        symbol: symbol,
+        price: close,
+        change: change,
+        country: meta.country,
+        market: row.exchange || "Marketstack",
+      };
+    })
+    .filter(Boolean);
+}
+
+async function loadLiveMarketData() {
+  const apiKey = sessionStorage.getItem("MARKETSTACK_API_KEY");
+
+  if (!apiKey) {
+    currentStocks = [...mockStocks];
+    applyFilters();
+    setApiStatus("Demo data is currently displayed.", "secondary");
+    return;
+  }
+
+  setApiStatus("Loading Marketstack end-of-day data...", "info");
+
+  try {
+    const params = new URLSearchParams({
+      symbols: apiSymbols.join(","),
+      limit: "20",
     });
+
+    const response = await fetch(
+      `https://api.marketstack.com/v2/eod?${params.toString()}`,
+      {
+        headers: {
+          apikey: apiKey,
+        },
+      }
+    );
+
+    const payload = await response.json().catch(() => ({}));
+
+    if (!response.ok || payload.error) {
+      throw new Error(
+        payload?.error?.message ||
+          `API request failed with status ${response.status}`
+      );
+    }
+
+    const liveStocks = convertMarketstackData(payload);
+
+    if (liveStocks.length === 0) {
+      throw new Error("No usable stock data was returned.");
+    }
+
+    currentStocks = liveStocks;
+    applyFilters();
+
+    setApiStatus(
+      "Live Marketstack end-of-day data loaded successfully.",
+      "success"
+    );
+  } catch (error) {
+    console.warn("Marketstack error:", error.message);
+
+    currentStocks = [...mockStocks];
+    applyFilters();
+
+    setApiStatus(
+      `Live data is unavailable. Demo data is displayed instead. ${error.message}`,
+      "warning"
+    );
+  }
+}
+
+// ==========================================
+// 5. EVENTS
+// ==========================================
+
+function initSearchEngine() {
+  const searchInput = document.getElementById("search-input");
+
+  if (!searchInput) return;
+
+  searchInput.addEventListener("input", applyFilters);
 }
 
 function initCurrencyEngine() {
-    const dropdown = document.getElementById('currency-select');
-    if (!dropdown) return;
+  const currencySelect = document.getElementById("currency-select");
 
-    dropdown.addEventListener('change', (event) => {
-        selectedCurrency = event.target.value;
-        renderTableRows(mockStocks);
-    });
+  if (!currencySelect) return;
+
+  currencySelect.addEventListener("change", (event) => {
+    selectedCurrency = event.target.value;
+    applyFilters();
+  });
+}
+
+function initLiveDataButtons() {
+  const liveButton = document.getElementById("live-data-button");
+  const demoButton = document.getElementById("demo-data-button");
+
+  liveButton?.addEventListener("click", () => {
+    const apiKey = window.prompt(
+      "Enter your Marketstack API key. It will only be stored for this browser session."
+    );
+
+    if (!apiKey || !apiKey.trim()) return;
+
+    sessionStorage.setItem("MARKETSTACK_API_KEY", apiKey.trim());
+    loadLiveMarketData();
+  });
+
+  demoButton?.addEventListener("click", () => {
+    sessionStorage.removeItem("MARKETSTACK_API_KEY");
+    currentStocks = [...mockStocks];
+    applyFilters();
+    setApiStatus("Demo data is currently displayed.", "secondary");
+  });
 }
 
 function initChartTimeRangeButtons() {
-    const timeFrames = ['1D', '1M', '3M', '1Y'];
-    
-    timeFrames.forEach(frame => {
-        const targetBtn = document.getElementById(`btn-${frame}`);
-        if (!targetBtn) return;
+  const timeFrames = ["1D", "1M", "3M", "1Y"];
 
-        targetBtn.addEventListener('click', () => {
-            timeFrames.forEach(f => document.getElementById(`btn-${f}`)?.classList.remove('active'));
-            targetBtn.classList.add('active');
+  timeFrames.forEach((frame) => {
+    const button = document.getElementById(`btn-${frame}`);
 
-            if (window.myStockChart) {
-                window.myStockChart.data.datasets[0].data = chartHistoricalData[frame];
-                window.myStockChart.update();
-            }
-        });
+    if (!button) return;
+
+    button.addEventListener("click", () => {
+      timeFrames.forEach((item) => {
+        document.getElementById(`btn-${item}`)?.classList.remove("active");
+      });
+
+      button.classList.add("active");
+
+      const selectedData = chartHistoricalData[frame];
+
+      if (window.myStockChart && selectedData) {
+        window.myStockChart.data.labels = selectedData.labels;
+        window.myStockChart.data.datasets[0].data = selectedData.values;
+        window.myStockChart.update();
+      }
     });
+  });
 }
 
-// Global Execution
-document.addEventListener('DOMContentLoaded', () => {
-    runMarketstackAPI();
+// ==========================================
+// 6. START
+// ==========================================
+
+document.addEventListener("DOMContentLoaded", () => {
+  const marketTable = document.getElementById("stock-table-body");
+
+  // API only runs on Market page.
+  if (marketTable) {
     initSearchEngine();
     initCurrencyEngine();
-    initChartTimeRangeButtons();
+    initLiveDataButtons();
+    renderTableRows(currentStocks);
+    setApiStatus("Demo data is currently displayed.", "secondary");
+  }
+
+  initChartTimeRangeButtons();
 });

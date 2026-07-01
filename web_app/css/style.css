@@ -79,7 +79,7 @@ body {
 }
 
 .table-responsive-custom table {
-  min-width: 550px;
+  min-width: 650px;
 }
 
 @media (max-width: 768px) {
