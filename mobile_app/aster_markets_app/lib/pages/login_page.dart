@@ -23,7 +23,6 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _login() {
-    if (!_formKey.currentState!.validate()) return;
 
     Navigator.pushReplacementNamed(context, '/home');
   }
