@@ -4,6 +4,7 @@ import '../widgets/bottom_nav.dart';
 import '../widgets/stock_card.dart';
 import '../services/location_service.dart';
 import '../services/stock_api_service.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -17,6 +18,25 @@ class _HomePageState extends State<HomePage> {
 
   final StockApiService _stockApiService = StockApiService();
 
+  final Uri _webAppUri = Uri.parse(
+    'https://shs96.github.io/stock-market-final-project/',
+  );
+
+  Future<void> _openWebApp() async {
+    final launched = await launchUrl(
+      _webAppUri,
+      mode: LaunchMode.externalApplication,
+    );
+
+    if (!launched && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Could not open the web app.'),
+        ),
+      );
+    }
+  }
+
   List<StockQuote> _quotes = [];
   bool _isLoadingStocks = true;
   String? _stockError;
@@ -25,6 +45,9 @@ class _HomePageState extends State<HomePage> {
     'AAPL': 'Apple',
     'MSFT': 'Microsoft',
     'NVDA': 'NVIDIA',
+    'AMZN': 'Amazon',
+    'GOOGL': 'Alphabet',
+    'TSLA': 'Tesla',
   };
 
   bool _usingFallback = false;
@@ -52,6 +75,30 @@ class _HomePageState extends State<HomePage> {
       open: 140.10,
       high: 141.30,
       low: 137.90,
+      date: '2026-06-20T00:00:00+0000',
+    ),
+    StockQuote(
+      symbol: 'AMZN',
+      close: 185.60,
+      open: 184.10,
+      high: 187.00,
+      low: 183.50,
+      date: '2026-06-20T00:00:00+0000',
+    ),
+    StockQuote(
+      symbol: 'GOOGL',
+      close: 175.80,
+      open: 176.90,
+      high: 177.50,
+      low: 174.20,
+      date: '2026-06-20T00:00:00+0000',
+    ),
+    StockQuote(
+      symbol: 'TSLA',
+      close: 183.20,
+      open: 181.00,
+      high: 185.60,
+      low: 179.80,
       date: '2026-06-20T00:00:00+0000',
     ),
   ];
@@ -84,13 +131,26 @@ class _HomePageState extends State<HomePage> {
         'AAPL',
         'MSFT',
         'NVDA',
+        'AMZN',
+        'GOOGL',
+        'TSLA',
       ]);
 
       if (!mounted) return;
 
+      final quoteBySymbol = {
+        for (final quote in quotes) quote.symbol.toUpperCase(): quote,
+      };
+
+      final completedQuotes = _fallbackQuotes.map((fallbackQuote) {
+        return quoteBySymbol[fallbackQuote.symbol] ?? fallbackQuote;
+      }).toList();
+
+      if (!mounted) return;
+
       setState(() {
-        _quotes = quotes;
-        _usingFallback = false;
+        _quotes = completedQuotes;
+        _usingFallback = quotes.length < _fallbackQuotes.length;
         _isLoadingStocks = false;
         _stockError = null;
       });
@@ -155,8 +215,14 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         title: const Text('Aster Markets'),
-        actions: const [
-          Padding(
+
+        actions: [
+          IconButton(
+            tooltip: 'Open Web App',
+            icon: const Icon(Icons.language),
+            onPressed: _openWebApp,
+          ),
+          const Padding(
             padding: EdgeInsets.only(right: 16),
             child: Icon(Icons.notifications_none),
           ),
@@ -189,11 +255,11 @@ class _HomePageState extends State<HomePage> {
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: [
-                  _marketBox('DAX', '18,497.32', '+0.82%', true),
+                  _marketBox('NASDAQ', 'Demo', '+0.72%', true),
                   const SizedBox(width: 12),
-                  _marketBox('FTSE 100', '8,231.14', '-0.18%', false),
+                  _marketBox('S&P 500', 'Demo', '+0.48%', true),
                   const SizedBox(width: 12),
-                  _marketBox('CAC 40', '7,992.10', '+0.41%', true),
+                  _marketBox('Dow Jones', 'Demo', '-0.16%', false),
                 ],
               ),
             ),
@@ -228,7 +294,7 @@ class _HomePageState extends State<HomePage> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: const Text(
-                    'Live market data is temporarily unavailable. Showing demo data.',
+                    'Some live prices are unavailable. Demo data is shown for missing stocks.',
                     style: TextStyle(
                       color: Color(0xFFD8B15C),
                       fontSize: 13,

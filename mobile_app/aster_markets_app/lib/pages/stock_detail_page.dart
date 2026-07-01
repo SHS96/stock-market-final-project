@@ -112,8 +112,11 @@ class _StockDetailPageState extends State<StockDetailPage> {
   }
 
   Future<void> _openWebApp() async {
-    const webAppUrl =
-        'https://YOUR_GITHUB_USERNAME.github.io/aster-markets/';
+    final symbol = (_quote?.symbol ?? 'AAPL').toUpperCase();
+
+    final webAppUrl =
+        'https://shs96.github.io/stock-market-final-project/'
+        'stock-detail.html?symbol=${Uri.encodeComponent(symbol)}';
 
     final uri = Uri.parse(webAppUrl);
 
