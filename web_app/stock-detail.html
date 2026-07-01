@@ -33,37 +33,60 @@
     <div class="container">
         <div class="row align-items-center">
             <div class="col-lg-6">
-                <p style="color: var(--text-muted)">AEX · Netherlands</p>
-                <h1 class="display-5 fw-bold">ASML Holding</h1>
-                <h2 class="mt-2">€912.40</h2>
-                <p class="text-positive fw-bold fs-5">+2.46% Today</p>
+                <p id="stock-market" style="color: var(--text-muted)">
+                    NASDAQ · United States
+                </p>
+
+                <h1 id="stock-name" class="display-5 fw-bold">Apple</h1>
+
+                <h2 id="stock-price" class="mt-2">$195.32</h2>
+
+                <p id="stock-change" class="text-positive fw-bold fs-5">
+                    +1.15% Today
+                </p>
+
+                <a
+                    id="stock-news-link"
+                    href="#"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="btn-custom d-inline-block mt-2"
+                >
+                    View Latest News
+                </a>
             </div>
+
             <div class="col-lg-6 mt-4 mt-lg-0">
                 <div class="card card-custom p-4">
                     <div class="row text-center">
                         <div class="col-4">
                             <p style="color:var(--text-muted); font-size:0.85rem">Open</p>
-                            <p class="fw-bold">€890.10</p>
+                            <p id="stock-open" class="fw-bold">$193.10</p>
                         </div>
+
                         <div class="col-4">
                             <p style="color:var(--text-muted); font-size:0.85rem">High</p>
-                            <p class="fw-bold">€918.60</p>
+                            <p id="stock-high" class="fw-bold">$196.00</p>
                         </div>
+
                         <div class="col-4">
                             <p style="color:var(--text-muted); font-size:0.85rem">Low</p>
-                            <p class="fw-bold">€887.30</p>
+                            <p id="stock-low" class="fw-bold">$192.80</p>
                         </div>
+
                         <div class="col-4 mt-3">
                             <p style="color:var(--text-muted); font-size:0.85rem">Volume</p>
-                            <p class="fw-bold">1.2M</p>
+                            <p id="stock-volume" class="fw-bold">52.4M</p>
                         </div>
+
                         <div class="col-4 mt-3">
                             <p style="color:var(--text-muted); font-size:0.85rem">Mkt Cap</p>
-                            <p class="fw-bold">€361B</p>
+                            <p id="stock-cap" class="fw-bold">$2.99T</p>
                         </div>
+
                         <div class="col-4 mt-3">
                             <p style="color:var(--text-muted); font-size:0.85rem">P/E Ratio</p>
-                            <p class="fw-bold">38.4</p>
+                            <p id="stock-pe" class="fw-bold">30.6</p>
                         </div>
                     </div>
                 </div>
@@ -105,48 +128,7 @@
                     <th>Change</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr>
-                    <td>20 Jun 2026</td>
-                    <td>€890.10</td>
-                    <td>€918.60</td>
-                    <td>€887.30</td>
-                    <td>€912.40</td>
-                    <td class="text-positive fw-bold">+2.46%</td>
-                </tr>
-                <tr>
-                    <td>19 Jun 2026</td>
-                    <td>€875.00</td>
-                    <td>€892.40</td>
-                    <td>€870.10</td>
-                    <td>€890.10</td>
-                    <td class="text-positive fw-bold">+1.72%</td>
-                </tr>
-                <tr>
-                    <td>18 Jun 2026</td>
-                    <td>€880.30</td>
-                    <td>€883.00</td>
-                    <td>€864.50</td>
-                    <td>€875.00</td>
-                    <td class="text-negative fw-bold">-0.60%</td>
-                </tr>
-                <tr>
-                    <td>17 Jun 2026</td>
-                    <td>€865.20</td>
-                    <td>€885.10</td>
-                    <td>€860.00</td>
-                    <td>€880.30</td>
-                    <td class="text-positive fw-bold">+1.75%</td>
-                </tr>
-                <tr>
-                    <td>16 Jun 2026</td>
-                    <td>€872.00</td>
-                    <td>€875.50</td>
-                    <td>€855.40</td>
-                    <td>€865.20</td>
-                    <td class="text-negative fw-bold">-0.78%</td>
-                </tr>
-            </tbody>
+            <tbody id="stock-history-body"></tbody>
         </table>
         </div>
     </div>
@@ -164,29 +146,240 @@
 
 <!-- Inline chart modified slightly to allow Basir's script to read it globally -->
 <script>
-    const ctx = document.getElementById('stockChart').getContext('2d');
-    window.myStockChart = new Chart(ctx, {
-        type: 'line',
+    const stockDetails = {
+        AAPL: {
+            name: "Apple",
+            market: "NASDAQ · United States",
+            price: 195.32,
+            change: 1.15,
+            open: 193.10,
+            high: 196.00,
+            low: 192.80,
+            volume: "52.4M",
+            cap: "$2.99T",
+            pe: "30.6"
+        },
+        MSFT: {
+            name: "Microsoft",
+            market: "NASDAQ · United States",
+            price: 420.10,
+            change: 0.62,
+            open: 417.50,
+            high: 422.80,
+            low: 416.20,
+            volume: "18.6M",
+            cap: "$3.12T",
+            pe: "36.8"
+        },
+        NVDA: {
+            name: "NVIDIA",
+            market: "NASDAQ · United States",
+            price: 138.25,
+            change: -1.32,
+            open: 140.10,
+            high: 141.20,
+            low: 137.40,
+            volume: "286.5M",
+            cap: "$3.37T",
+            pe: "55.4"
+        },
+        AMZN: {
+            name: "Amazon",
+            market: "NASDAQ · United States",
+            price: 185.60,
+            change: 0.81,
+            open: 184.10,
+            high: 187.00,
+            low: 183.50,
+            volume: "37.2M",
+            cap: "$1.95T",
+            pe: "43.1"
+        },
+        GOOGL: {
+            name: "Alphabet",
+            market: "NASDAQ · United States",
+            price: 175.80,
+            change: -0.62,
+            open: 176.90,
+            high: 177.50,
+            low: 174.20,
+            volume: "25.8M",
+            cap: "$2.15T",
+            pe: "24.7"
+        },
+        TSLA: {
+            name: "Tesla",
+            market: "NASDAQ · United States",
+            price: 183.20,
+            change: 1.22,
+            open: 181.00,
+            high: 185.60,
+            low: 179.80,
+            volume: "94.6M",
+            cap: "$589B",
+            pe: "52.9"
+        }
+    };
+
+    const rangeLabels = {
+        "1D": ["09:30", "11:00", "12:30", "14:00", "Close"],
+        "1M": ["Week 1", "Week 2", "Week 3", "Week 4", "Today"],
+        "3M": ["Month 1", "Month 2", "Month 3", "Month 4", "Today"],
+        "1Y": ["Jul", "Sep", "Nov", "Feb", "Today"]
+    };
+
+    const rangeMoves = {
+        "1D": [-0.014, -0.007, -0.011, -0.004, 0],
+        "1M": [-0.060, -0.038, -0.045, -0.018, 0],
+        "3M": [-0.140, -0.100, -0.065, -0.035, 0],
+        "1Y": [-0.290, -0.210, -0.140, -0.070, 0]
+    };
+
+    const params = new URLSearchParams(window.location.search);
+    const selectedSymbol = (params.get("symbol") || "AAPL").toUpperCase();
+    const stock = stockDetails[selectedSymbol] || stockDetails.AAPL;
+
+    function formatPrice(value) {
+        return `$${Number(value).toFixed(2)}`;
+    }
+
+    function formatPercent(value) {
+        return `${value >= 0 ? "+" : ""}${value.toFixed(2)}%`;
+    }
+
+    function getRangeValues(range) {
+        const direction = stock.change >= 0 ? 1 : -1;
+
+        return rangeMoves[range].map((move) => {
+            return Number((stock.price * (1 + move * direction)).toFixed(2));
+        });
+    }
+
+    function updateHeader() {
+        document.getElementById("stock-market").textContent = stock.market;
+        document.getElementById("stock-name").textContent = stock.name;
+        document.getElementById("stock-price").textContent = formatPrice(stock.price);
+
+        const changeElement = document.getElementById("stock-change");
+        changeElement.textContent = `${formatPercent(stock.change)} Today`;
+        changeElement.className =
+            `${stock.change >= 0 ? "text-positive" : "text-negative"} fw-bold fs-5`;
+
+        document.getElementById("stock-open").textContent = formatPrice(stock.open);
+        document.getElementById("stock-high").textContent = formatPrice(stock.high);
+        document.getElementById("stock-low").textContent = formatPrice(stock.low);
+        document.getElementById("stock-volume").textContent = stock.volume;
+        document.getElementById("stock-cap").textContent = stock.cap;
+        document.getElementById("stock-pe").textContent = stock.pe;
+
+        const newsLink = document.getElementById("stock-news-link");
+
+        newsLink.href =
+            `https://news.google.com/search?q=${encodeURIComponent(
+                `${selectedSymbol} stock news`
+            )}`;
+    }
+
+    function updateHistoryTable(range) {
+        const values = getRangeValues(range);
+        const labels = rangeLabels[range];
+        const tableBody = document.getElementById("stock-history-body");
+
+        tableBody.innerHTML = values
+            .map((close, index) => {
+                const open = Number((close * 0.993).toFixed(2));
+                const high = Number((close * 1.008).toFixed(2));
+                const low = Number((close * 0.988).toFixed(2));
+
+                const previousClose =
+                    index === 0 ? open : values[index - 1];
+
+                const change =
+                    ((close - previousClose) / previousClose) * 100;
+
+                const changeClass =
+                    change >= 0 ? "text-positive" : "text-negative";
+
+                return `
+                    <tr>
+                        <td>${labels[index]}</td>
+                        <td>${formatPrice(open)}</td>
+                        <td>${formatPrice(high)}</td>
+                        <td>${formatPrice(low)}</td>
+                        <td>${formatPrice(close)}</td>
+                        <td class="${changeClass} fw-bold">
+                            ${formatPercent(change)}
+                        </td>
+                    </tr>
+                `;
+            })
+            .reverse()
+            .join("");
+    }
+
+    const chartContext = document
+        .getElementById("stockChart")
+        .getContext("2d");
+
+    window.myStockChart = new Chart(chartContext, {
+        type: "line",
         data: {
-            labels: ['16 Jun', '17 Jun', '18 Jun', '19 Jun', '20 Jun'],
+            labels: rangeLabels["1M"],
             datasets: [{
-                label: 'ASML Price',
-                data: [865.20, 880.30, 875.00, 890.10, 912.40],
-                borderColor: '#1177FF',
-                backgroundColor: 'rgba(17, 119, 255, 0.1)',
+                label: `${stock.symbol || selectedSymbol} Price`,
+                data: getRangeValues("1M"),
+                borderColor: "#1177FF",
+                backgroundColor: "rgba(17, 119, 255, 0.1)",
                 borderWidth: 2,
                 fill: true,
                 tension: 0.4
             }]
         },
         options: {
-            plugins: { legend: { labels: { color: 'white' } } },
+            plugins: {
+                legend: {
+                    labels: {
+                        color: "white"
+                    }
+                }
+            },
             scales: {
-                x: { ticks: { color: '#9CA3AF' }, grid: { color: '#1e2140' } },
-                y: { ticks: { color: '#9CA3AF' }, grid: { color: '#1e2140' } }
+                x: {
+                    ticks: { color: "#9CA3AF" },
+                    grid: { color: "#1e2140" }
+                },
+                y: {
+                    ticks: { color: "#9CA3AF" },
+                    grid: { color: "#1e2140" }
+                }
             }
         }
     });
+
+    function updateChart(range) {
+        window.myStockChart.data.labels = rangeLabels[range];
+        window.myStockChart.data.datasets[0].data = getRangeValues(range);
+        window.myStockChart.update();
+
+        updateHistoryTable(range);
+
+        ["1D", "1M", "3M", "1Y"].forEach((item) => {
+            document
+                .getElementById(`btn-${item}`)
+                ?.classList.remove("active");
+        });
+
+        document.getElementById(`btn-${range}`)?.classList.add("active");
+    }
+
+    ["1D", "1M", "3M", "1Y"].forEach((range) => {
+        document
+            .getElementById(`btn-${range}`)
+            ?.addEventListener("click", () => updateChart(range));
+    });
+
+    updateHeader();
+    updateChart("1M");
 </script>
 <script src="app.js"></script>
 </body>

@@ -31,8 +31,13 @@
 <!-- Page Header -->
 <section class="hero">
     <div class="container">
-        <h1 class="display-5 fw-bold">Market Overview</h1>
-        <p class="lead" style="color: var(--text-muted)">Browse live European stock market data and latest news.</p>
+        <h1 class="display-5 fw-bold">
+            <span id="selected-country-label">United States</span> Market Overview
+        </h1>
+
+        <p id="market-context" class="lead" style="color: var(--text-muted)">
+            Select a market manually or use your current location.
+        </p>
     </div>
 </section>
 
@@ -48,7 +53,7 @@
         <div class="col-md-4">
             <select id="currency-select" class="form-select bg-dark text-white border-secondary">
                 <option value="EUR">Currency: EUR (€)</option>
-                <option value="USD">Currency: USD ($)</option>
+                <option value="USD" selected>Currency: USD ($)</option>
                 <option value="CNY">Currency: CNY (¥)</option>
             </select>
         </div>
@@ -95,23 +100,31 @@
     <div class="row g-4">
         <div class="col-md-4">
             <div class="card card-custom p-4 h-100">
-                <p style="color: var(--text-muted); font-size:0.85rem">20 Jun 2026</p>
-                <h5>DAX reaches new high amid strong earnings</h5>
-                <p style="color: var(--text-muted)">German index climbs on the back of positive corporate results across the technology and industrial sectors.</p>
+                <p style="color: var(--text-muted); font-size:0.85rem">Market Update</p>
+                <h5>Apple shares rise after strong product demand</h5>
+                <p style="color: var(--text-muted)">
+                    Apple remains one of the most actively followed technology stocks in the US market.
+                </p>
             </div>
         </div>
+
         <div class="col-md-4">
             <div class="card card-custom p-4 h-100">
-                <p style="color: var(--text-muted); font-size:0.85rem">19 Jun 2026</p>
-                <h5>FTSE 100 slips on energy sector weakness</h5>
-                <p style="color: var(--text-muted)">London markets dipped slightly as oil prices fell and energy stocks dragged on overall performance.</p>
+                <p style="color: var(--text-muted); font-size:0.85rem">Market Update</p>
+                <h5>NVIDIA remains active in AI market trading</h5>
+                <p style="color: var(--text-muted)">
+                    Investor attention remains focused on AI-related demand and semiconductor growth.
+                </p>
             </div>
         </div>
+
         <div class="col-md-4">
             <div class="card card-custom p-4 h-100">
-                <p style="color: var(--text-muted); font-size:0.85rem">18 Jun 2026</p>
-                <h5>ASML reports record chip equipment orders</h5>
-                <p style="color: var(--text-muted)">The Dutch semiconductor giant posted strong quarterly figures, boosting confidence in the European tech sector.</p>
+                <p style="color: var(--text-muted); font-size:0.85rem">Market Update</p>
+                <h5>Amazon and Alphabet continue to attract investors</h5>
+                <p style="color: var(--text-muted)">
+                    Large technology companies continue to play an important role in market activity.
+                </p>
             </div>
         </div>
     </div>

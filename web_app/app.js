@@ -53,29 +53,29 @@ const mockStocks = [
   },
 ];
   
-];
+
 
 let currentStocks = [...mockStocks];
-let selectedCurrency = "EUR";
+let selectedCurrency = "USD";
+
 
 const currencyConfig = {
-  EUR: { rate: 1, symbol: "€" },
-  USD: { rate: 1.12, symbol: "$" },
-  CNY: { rate: 7.82, symbol: "¥" },
+  USD: { rate: 1.0, symbol: "$" },
+  EUR: { rate: 0.92, symbol: "€" },
+  CNY: { rate: 7.2, symbol: "¥" },
 };
 
+
 // Only used when testing the live API.
-const apiSymbols = ["ASML", "SAP"];
+const apiSymbols = ["AAPL", "MSFT", "NVDA", "AMZN", "GOOGL", "TSLA"];
 
 const stockMeta = {
-  ASML: {
-    name: "ASML Holding",
-    country: "Netherlands",
-  },
-  SAP: {
-    name: "SAP",
-    country: "Germany",
-  },
+  AAPL: { name: "Apple", country: "United States" },
+  MSFT: { name: "Microsoft", country: "United States" },
+  NVDA: { name: "NVIDIA", country: "United States" },
+  AMZN: { name: "Amazon", country: "United States" },
+  GOOGL: { name: "Alphabet", country: "United States" },
+  TSLA: { name: "Tesla", country: "United States" },
 };
 
 // ==========================================
@@ -139,11 +139,11 @@ function renderTableRows(stocksArray) {
         <td>${stock.country}</td>
         <td>${stock.market}</td>
         <td>
-          <a href="stock-detail.html"
-             class="btn-custom d-inline-block"
-             style="padding:5px 14px; font-size:0.85rem">
-             View
-          </a>
+        <a href="stock-detail.html?symbol=${encodeURIComponent(stock.symbol)}"
+            class="btn-custom d-inline-block"
+            style="padding:5px 14px; font-size:0.85rem">
+            View
+        </a>
         </td>
       </tr>
     `;
